@@ -30,19 +30,18 @@ Vagrant.configure("2") do |config|
 			i.vm.provision "file", source: "hosts", destination: "/tmp/hosts"
 			i.vm.provision "shell", inline: "cat /tmp/hosts >> /etc/hosts", privileged: true
 		end 
-		i.vm.provision "shell", inline: "docker swarm init --advertise-addr #{manager_ip}"
-		i.vm.provision "shell", inline: "docker swarm join-token -q worker > /vagrant/token"
+		i.vm.provision "shell", inline: "docker swarm init --advertise-addr #{manager_ip}; true"
+		i.vm.provision "shell", inline: "docker swarm join-token -q worker > /vagrant/token; true"
+		i.vm.provision "shell", inline: "mkdir mysql-datadir; true"
 		config.vm.provision "file", source: "./docker-stack.yaml", destination: "docker-stack.yaml"
-		config.vm.provision "file", source: "./app", destination: "/vagrant/app"
-		config.vm.provision "file", source: "./nginx", destination: "/vagrant/nginx"
-		config.vm.provision "file", source: "./php-fpm", destination: "/vagrant/php-fpm"
+		config.vm.provision "file", source: "./app", destination: "app"
+		config.vm.provision "file", source: "./nginx", destination: "nginx"
+		config.vm.provision "file", source: "./php-fpm", destination: "php-fpm"
 		
 		config.vm.provision "docker" do |d|
-			d.build_image "/vagrant/nginx", args: "-t nginxapp"
-			d.build_image "/vagrant/php-fpm", args: "-t phpapp"
+			d.build_image "nginx", args: "-t nginxapp"
+			d.build_image "php-fpm", args: "-t phpapp"
 		end
-		
-		config.vm.provision "shell", inline: "mkdir /vagrant/mysql-datadir"
 	end 
 
 	instances.each do |instance| 
@@ -56,7 +55,7 @@ Vagrant.configure("2") do |config|
 				i.vm.provision "shell", inline: "cat /tmp/hosts >> /etc/hosts", privileged: true
 			end 
 			
-			i.vm.provision "shell", inline: "docker swarm join --advertise-addr #{instance[:ip]} --listen-addr #{instance[:ip]}:2377 --token `cat /vagrant/token` #{manager_ip}:2377"
+			i.vm.provision "shell", inline: "docker swarm join --advertise-addr #{instance[:ip]} --listen-addr #{instance[:ip]}:2377 --token `cat /vagrant/token` #{manager_ip}:2377; true"
 		
 			if (instance[:number] == "#{numworkers}")
 				i.vm.provision :host_shell do |host_shell|
