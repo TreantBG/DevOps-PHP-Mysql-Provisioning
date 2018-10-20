@@ -1,0 +1,29 @@
+version: '3'
+services:
+    php-fpm:
+        image: phpapp
+        ports:
+            - 9000:9000
+        volumes:
+            - ./app:/var/www/html/
+        links:
+            - db
+    nginx:
+        image: nginxapp
+        ports:
+            - 8080:80
+        volumes:
+            - ./app:/var/www/html/        
+        links:
+            - php-fpm
+    db:
+        image: mysql/mysql-server:5.7
+        ports:
+            - 3306:3306
+        environment:
+            MYSQL_DATABASE: mydb
+            MYSQL_USER: dev
+            MYSQL_PASSWORD: 123123
+            MYSQL_ROOT_PASSWORD: 123123
+        volumes:
+            - ./mysql-datadir:/var/lib/mysql
