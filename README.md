@@ -4,8 +4,13 @@ Docker swarm nginx,php,mysql
   - Nginx
   - Mysql
   - PHP 7 FPM 
-
-
+And for monitoring:
+  - Grafana
+  - Prometeus
+  - Alert Manager
+  - ELK
+  
+  
 # Requirements
   - VirtualBox
   - Vagrant
