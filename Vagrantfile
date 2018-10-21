@@ -61,7 +61,7 @@ Vagrant.configure("2") do |config|
 			if (instance[:number] == "#{numworkers}")
 				i.vm.provision :host_shell do |host_shell|
 					host_shell.inline = 'vagrant ssh manager -- docker stack deploy --compose-file=docker-stack.yaml phpstack';
-					host_shell.inline = 'vagrant ssh manager -- docker stack deploy --compose-file monitoring-stack.yaml monitoring';
+					host_shell.inline = 'vagrant ssh manager -- docker stack deploy --compose-file=monitoring-stack.yaml monitoring';
 				end
 			end
 		end		
