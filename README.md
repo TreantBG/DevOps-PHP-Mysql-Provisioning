@@ -21,4 +21,9 @@ Setup the machines with swarm (may take up to 30+ minutes)
 
 Wait services to go UP (mysql database stars a bit slover then others)
 
-Go to http://192.168.10.2:8080/
+Go to http://192.168.10.2:8080/ to see simple php/msql app
+
+Go to http://192.168.10.2:3000 to see monitoring system.
+Login with admin/admin
+Grafana need datasources to display dashboards
+

@@ -34,6 +34,7 @@ Vagrant.configure("2") do |config|
 		i.vm.provision "shell", inline: "docker swarm join-token -q worker > /vagrant/token; true"
 		i.vm.provision "shell", inline: "mkdir mysql-datadir; true"
 		config.vm.provision "file", source: "./docker-stack.yaml", destination: "docker-stack.yaml"
+		config.vm.provision "file", source: "./monitoring-stack.yaml", destination: "monitoring-stack.yaml"
 		config.vm.provision "file", source: "./app", destination: "app"
 		config.vm.provision "file", source: "./nginx", destination: "nginx"
 		config.vm.provision "file", source: "./php-fpm", destination: "php-fpm"
@@ -60,6 +61,7 @@ Vagrant.configure("2") do |config|
 			if (instance[:number] == "#{numworkers}")
 				i.vm.provision :host_shell do |host_shell|
 					host_shell.inline = 'vagrant ssh manager -- docker stack deploy --compose-file=docker-stack.yaml phpstack';
+					host_shell.inline = 'vagrant ssh manager -- docker stack deploy --compose-file monitoring-stack.yaml monitoring';
 				end
 			end
 		end		
